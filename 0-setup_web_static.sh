@@ -8,6 +8,5 @@ echo "Holberton School" | tee /data/web_static/releases/test/index.html
 ln -sf /data/web_static/releases/test/ /data/web_static/current
 chown -hR ubuntu:ubuntu /data/
 FILE=/etc/nginx/sites-available/default
-sed -i '30i\\n\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\\
-n\t}\n' $FILE
+sed -i '30i\\n\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n' $FILE
 service nginx restart
