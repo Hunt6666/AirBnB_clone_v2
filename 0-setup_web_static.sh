@@ -15,6 +15,6 @@ ln -sf /data/web_static/releases/test/ /data/web_static/current
 chown -R ubuntu:ubuntu /data/
 chmod -R 755 /data/
 FILE=/etc/nginx/sites-available/default
-sed -i '30i\\n\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\
+sed -i '30i\\n\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\\
 n\t}\n' $FILE
 service nginx restart
