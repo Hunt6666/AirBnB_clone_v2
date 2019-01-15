@@ -8,15 +8,15 @@ from models.base_model import BaseModel
 from models.state import State
 from models.engine.db_storage import DBStorage
 
-os.environ['HBNB_MYSQL_USER'] = 'hbnb_test'
-os.environ['HBNB_MYSQL_PWD'] = 'hbnb_test_pwd'
-os.environ['HBNB_MYSQL_HOST'] = 'localhost'
-os.environ['HBNB_MYSQL_DB'] = 'hbnb_test_db'
-os.environ['HBNB_TYPE_STORAGE'] = 'db'
+try:
+    usr = os.getenv('HBNB_MYSQL_USER')
+    pwd = os.getenv('HBNB_MYSQL_PWD')
+    host = os.getenv('HBNB_MYSQL_HOST')
+    db = os.getenv('HBNB_MYSQL_DB')
+except:
+    pass
 
-storage = DBStorage()
-
-
+@unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') != 'db', "DB not supported")
 class TestDBStorage(unittest.TestCase):
     '''this will test the DBStorage'''
 

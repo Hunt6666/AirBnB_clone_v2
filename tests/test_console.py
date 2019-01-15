@@ -21,19 +21,20 @@ from models import storage
 from models.review import Review
 from models.engine.file_storage import FileStorage
 
-os.environ['HBNB_MYSQL_USER'] = 'hbnb_test'
-os.environ['HBNB_MYSQL_PWD'] = 'hbnb_test_pwd'
-os.environ['HBNB_MYSQL_HOST'] = 'localhost'
-os.environ['HBNB_MYSQL_DB'] = 'hbnb_test_db'
-os.environ['HBNB_TYPE_STORAGE'] = 'db'
+usr = os.getenv('HBNB_MYSQL_USER')
+pwd = os.getenv('HBNB_MYSQL_PWD')
+host = os.getenv('HBNB_MYSQL_HOST')
+db = os.getenv('HBNB_MYSQL_DB')
 
-conn = MySQLdb.connect(host=os.getenv('HBNB_MYSQL_HOST'),
-                       user=os.getenv('HBNB_MYSQL_USER'),
-                       passwd=os.getenv('HBNB_MYSQL_PWD'),
-                       db=os.getenv('HBNB_MYSQL_DB'))
+try :
+    conn = MySQLdb.connect(host=host,
+                           user=usr,
+                           passwd=pwd,
+                           db=db)
 
-cur = conn.cursor()
-
+    cur = conn.cursor()
+except:
+    pass
 
 class TestConsole(unittest.TestCase):
     """this will test the console"""
@@ -88,7 +89,7 @@ class TestConsole(unittest.TestCase):
             self.consol.onecmd("quit")
             self.assertEqual('', f.getvalue())
 
-    def test_create(self):
+    def test_create_fs(self):
         """Test create command inpout and all features"""
         with patch('sys.stdout', new=StringIO()) as f:
             self.consol.onecmd("create")
@@ -104,23 +105,6 @@ class TestConsole(unittest.TestCase):
             self.consol.onecmd("all User")
             self.assertEqual(
                 "[[User]", f.getvalue()[:7])
-
-        with patch('sys.stdout', new=StringIO()) as f:
-            self.consol.onecmd('create Place name="Hunt"')
-            iden = f.getvalue()
-            cur.execute("""
-            SELECT name FROM places WHERE id=%s""", (iden,))
-            query_rows = cur.fetchall()
-            for row in query_rows:
-                print("query: {}".format(row))
-
-        with patch('sys.stdout', new=StringIO()) as f:
-            self.consol.onecmd("show Place " + iden)
-            inf = "Place." + iden
-            inf = inf[:-1]
-            name = storage._FileStorage__objects[inf].name
-            self.assertEqual("Hunt", name)
-            self.assertEqual(str, type(name))
 
         with patch('sys.stdout', new=StringIO()) as f:
             self.consol.onecmd('create Place name=13')
@@ -144,17 +128,6 @@ class TestConsole(unittest.TestCase):
             self.assertEqual(13.3, name)
             self.assertEqual(float, type(name))
 
-        """TODO
-        with patch('sys.stdout', new=StringIO()) as f:
-            self.consol.onecmd('create Place name=["bla", "bla", "bla"]')
-            iden = f.getvalue()
-        with patch('sys.stdout', new=StringIO()) as f:
-            self.consol.onecmd("show Place " + iden)
-            inf = "Place." + iden
-            inf = inf[:-1]
-            name = storage._FileStorage__objects[inf].name
-            self.assertEqual(None, name)
-        """
         with patch('sys.stdout', new=StringIO()) as f:
             self.consol.onecmd('create Place name="bla_bla"')
             iden = f.getvalue()
@@ -166,18 +139,17 @@ class TestConsole(unittest.TestCase):
             self.assertEqual(name, "bla bla")
             self.assertEqual(str, type(name))
 
+    @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') != 'db', "DB not supported")
+    def test_create_db(self):
+        """Test create command with DB"""
         with patch('sys.stdout', new=StringIO()) as f:
-            self.consol.onecmd('create Place name="bla bla"')
+            self.consol.onecmd('create Place name="Hunt"')
             iden = f.getvalue()
-        with patch('sys.stdout', new=StringIO()) as f:
-            self.consol.onecmd("show Place " + iden)
-            inf = "Place." + iden
-            inf = inf[:-1]
-            name = storage._FileStorage__objects[inf].name
-            self.assertEqual(name, "bla bla")
-            self.assertEqual(str, type(name))
-
-
+            cur.execute("""
+            SELECT name FROM places WHERE id=%s""", (iden,))
+            query_rows = cur.fetchall()
+            for row in query_rows:
+                print("query: {}".format(row))
 
     def test_show(self):
         """Test show command inpout"""
@@ -299,7 +271,7 @@ class TestConsole(unittest.TestCase):
             self.assertEqual(
                 "** no instance found **\n", f.getvalue())
 
-    @unittest.skip("demonstrating skipping")
+    @unittest.skip("skipping")
     def test_update(self):
         """Test alternate destroy command inpout"""
         with patch('sys.stdout', new=StringIO()) as f:
