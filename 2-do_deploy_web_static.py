@@ -1,10 +1,12 @@
 #!/usr/bin/python3
-""" do pack function"""
+""" do pack and do deploy functions"""
 
 import os
 from fabric.api import local, env, put, run
 from time import strftime
+
 env.host = ['34.73.60.145', '35.185.44.189']
+env.user = 'ubuntu'
 
 
 def do_pack():
@@ -26,17 +28,19 @@ def do_deploy(archive_path):
         return False
     try:
         fle = archive_path.split('/')[-1]
-        fle1 = fle.split('.')[0]
-        fle_pth = "/data/web_static/releases/" + fle1 + '/'
+        fle_pth = "/data/web_static/releases/" + fle + '/'
         sym = "/data/web_static/current"
         put(archive_path, "/tmp/")
         run("mkdri -p " + fle_pth)
         run("tar -xzf /tmp/" + fle + " -C " + fle_pth)
         run("rm /tmp/"+ fle)
-        run("mv " + fle_pth + "web_static")
+        run("mv " + fle_pth + "web_static/*" + fle_pth)
         run("rm -rf " + fle_pth + "web_static")
         run("rm -rf " + sym)
         run("ln -s " + fle_pth + ' ' + sym)
+        print('worked')
         return True
     except:
+        print('fail')
         return False
+    return True
