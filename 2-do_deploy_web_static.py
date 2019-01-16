@@ -25,19 +25,23 @@ def do_pack():
 def do_deploy(archive_path):
     """ distributes an archive to the web server """
     if not os.path.isfile(archive_path):
+        print(archive_path + " is not a file")
         return False
     try:
         fle = archive_path.split('/')[-1]
-        fle_pth = "/data/web_static/releases/" + fle + '/'
+        fle_dir = fle.split('.')[0]
+        pth = "/data/web_static/releases/"
+        fle_pth = pth + fle
         sym = "/data/web_static/current"
-        put(archive_path, "/tmp/")
-        run("mkdri -p " + fle_pth)
-        run("tar -xzf /tmp/" + fle + " -C " + fle_pth)
+        put(archive_path, "/tmp/" + fle)
+        run("rm -rf" + pth + fle_dir + '/')
+        run("mkdir -p " + pth + fle_dir + '/')
+        run("tar -xzf /tmp/" + fle + " -C " + pth + fle_dir + '/')
         run("rm /tmp/"+ fle)
-        run("mv " + fle_pth + "web_static/*" + fle_pth)
-        run("rm -rf " + fle_pth + "web_static")
+        run("mv " + pth + fle_dir + "web_static/* " + pth + fle_dir + '/')
+        run("rm -rf " + pth + fle_dir + "web_static")
         run("rm -rf " + sym)
-        run("ln -s " + fle_pth + ' ' + sym)
+        run("ln -s " + pth + fle_dir + ' ' + sym)
         print('worked')
         return True
     except:
