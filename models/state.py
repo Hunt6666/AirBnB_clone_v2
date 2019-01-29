@@ -22,12 +22,13 @@ class State(BaseModel, Base):
                           cascade="all, delete", backref="state")
 
     # For FileStorage
-    @property
-    def amenities(self):
-        """getter for amenities of theis placs
-           only for file storage"""
-        lst = []
-        for k, v in models.storage.all(models.City).items():
-            if v.place_id == self.id:
-                lst += [v]
-        return lst
+    if getenv('HBNB_TYPE_STORAGE') != 'db':
+        @property
+        def cities(self):
+            """getter for amenities of theis placs
+            only for file storage"""
+            lst = []
+            for k, v in models.storage.all(models.City).items():
+                if v.place_id == self.id:
+                    lst += [v]
+            return lst

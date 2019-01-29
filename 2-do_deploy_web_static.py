@@ -34,14 +34,14 @@ def do_deploy(archive_path):
         fle_pth = pth + fle
         sym = "/data/web_static/current"
         put(archive_path, "/tmp/" + fle)
-        run("rm -rf" + pth + fle_dir + '/')
-        run("mkdir -p " + pth + fle_dir + '/')
-        run("tar -xzf /tmp/" + fle + " -C " + pth + fle_dir + '/')
-        run("rm /tmp/"+ fle)
-        run("mv " + pth + fle_dir + "web_static/* " + pth + fle_dir + '/')
-        run("rm -rf " + pth + fle_dir + "web_static")
-        run("rm -rf " + sym)
-        run("ln -s " + pth + fle_dir + ' ' + sym)
+        sudo("rm -rf" + pth + fle_dir + '/')
+        sudo("mkdir -p " + pth + fle_dir + '/')
+        sudo("tar -xzf /tmp/" + fle + " -C " + pth + fle_dir + '/')
+        sudo("rm /tmp/"+ fle)
+        sudo("mv " + pth + fle_dir + "web_static/* " + pth + fle_dir + '/')
+        sudo("rm -rf " + pth + fle_dir + "web_static")
+        sudo("rm -rf " + sym)
+        sudo("ln -s " + pth + fle_dir + ' ' + sym)
         print('worked')
         return True
     except:
