@@ -22,7 +22,7 @@ class State(BaseModel, Base):
                           cascade="all, delete", backref="state")
 
     # For FileStorage
-    if getenv('HBNB_TYPE_STORAGE') != 'db':
+    if os.getenv('HBNB_TYPE_STORAGE') != 'db':
         @property
         def cities(self):
             """getter for amenities of theis placs
