@@ -28,6 +28,6 @@ class State(BaseModel, Base):
         only for file storage"""
         lst = []
         for k, v in models.storage.all(models.City).items():
-            if v.place_id == self.id:
+            if v.state_id == self.id:
                 lst += [v]
         return lst
