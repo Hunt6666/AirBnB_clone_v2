@@ -9,7 +9,7 @@
       {% for states in states|sort(attribute='name') %}
       <LI>{{ state.id }}: <B>{{ state.name }}</B></LI>
       <UL>
-	{% for city in cities[id]|sort(attribute=1) %}
+	{% for city in cities[id]|sort(attribute='name') %}
 	<LI>{{ city,id }}: <B>{{ city.name }}</B></LI>
 	{% endfor %}
       </UL>
