@@ -14,12 +14,15 @@ class State(BaseModel, Base):
         cities: reference to the City objects related to State
     """
     __tablename__ = "states"
+    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
 
-    name = Column(String(128), nullable=False)
+        name = Column(String(128), nullable=False)
 
-    # For DBStorage
-    cities = relationship("City",
-                          cascade="all, delete", backref="state")
+        # For DBStorage
+        cities = relationship("City",
+                              cascade="all, delete", backref="state")
+    else:
+        mane = ""
 
     # For FileStorage
     if os.getenv('HBNB_TYPE_STORAGE') == 'fs':
