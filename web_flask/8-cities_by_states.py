@@ -17,7 +17,7 @@ def list_cities_by_states():
 
 
 @app.teardown_appcontext
-def kill_session(exc):
+def kill_session(exception):
     """ kills the sqlalchemy session """
     storage.close()
 
