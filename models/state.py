@@ -23,11 +23,11 @@ class State(BaseModel, Base):
 
     # For FileStorage
     @property
-        def cities(self):
-            """getter for amenities of theis placs
-            only for file storage"""
-            lst = []
-            for k, v in models.storage.all(models.City).items():
-                if v.place_id == self.id:
-                    lst += [v]
-            return lst
+    def cities(self):
+        """getter for amenities of theis placs
+        only for file storage"""
+        lst = []
+        for k, v in models.storage.all(models.City).items():
+            if v.place_id == self.id:
+                lst += [v]
+        return lst
