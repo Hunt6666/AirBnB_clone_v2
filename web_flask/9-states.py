@@ -17,7 +17,7 @@ def states_cities(st=None):
         ret += [v]
         if st == v.id:
             ent = v
-    return render_template('8-cities_by_states.html', states=ret, ent=ent,
+    return render_template('9-states.html', states=ret, ent=ent,
                            st=st)
 
 
