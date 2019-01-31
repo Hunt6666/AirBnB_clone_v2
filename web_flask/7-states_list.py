@@ -13,10 +13,10 @@ def list_states():
     ret = []
     for k, v in dic.items():
         ret += [v]
-    return render_template('8-cities_by_states.html', states=ret)
+    return render_template('7-states_list.html', states=ret)
 
 @app.teardown_appcontext
-def kill_session(exc):
+def kill_session(exception):
     """ kills the sqlalchemy session """
     storage.close()
 
