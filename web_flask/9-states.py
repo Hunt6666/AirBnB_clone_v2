@@ -7,15 +7,18 @@ app = Flask(__name__)
 
 @app.route('/states/', strict_slashes=False)
 @app.route('/states/<state_id>', strict_slashes=False)
-def list_cities_by_states():
+def states_cities(st=None):
     """ lists all of the cities by states """
     storage.reload()
     dic = storage.all("State")
     ret = []
+    ent = None
     for k, v in dic.items():
         ret += [v]
-        if 
-    return render_template('8-cities_by_states.html', states=ret)
+        if st == v.id:
+            ent = v
+    return render_template('8-cities_by_states.html', states=ret, ent=ent,
+                           st=st)
 
 
 @app.teardown_appcontext
