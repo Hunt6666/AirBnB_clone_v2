@@ -15,6 +15,7 @@ def list_states():
         ret += [v]
     return render_template('7-states_list.html', states=ret)
 
+
 @app.teardown_appcontext
 def kill_session(exception):
     """ kills the sqlalchemy session """
