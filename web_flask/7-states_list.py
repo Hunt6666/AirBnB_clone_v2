@@ -10,8 +10,15 @@ def list_states():
     """ lists all of the states """
     storage.reload()
     dic = storage.all("State")
-    ret = {}
-    for 
+    ret = []
+    for k, v in dic.items():
+        ret += [v]
+    return render_template('8-cities_by_states.html', states=ret)
+
+@app.teardown_appcontext
+def kill_session(exc):
+    """ kills the sqlalchemy session """
+    storage.close()
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
